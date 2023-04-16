@@ -1,0 +1,28 @@
+from posixpath import normcase
+from itertools import product, permutations, combinations, combinations_with_replacement
+from math import factorial
+import numpy as np
+import pandas as pd
+import datetime
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import binom, poisson, expon, norm
+
+data_accidents = pd.read_csv('acidentes.csv')
+data_wine = pd.read_csv('vinho_nacional.csv', sep = ';', decimal = ',')
+
+
+# adjusting data
+data_accidents['data_acidente'] = pd.to_datetime(data_accidents['data_acidente'], errors='coerce')
+data_accidents['data_montly_accidents'] = data_accidents['data_acidente'].dt.strftime('%Y-%m')
+#counting the aumount of daily accidents
+data_montly_accidents = data_accidents.groupby('data_montly_accidents').size().to_frame('n').reset_index()
+data_montly_accidents
+
+# histogram with matplotlib
+plt.hist(data_montly_accidents['n'], alpha=0.7, rwidth=0.85)
+plt.xlabel('n')
+plt.ylabel('Frequency')
+# histogram with seaborn
+sns.displot(data_montly_accidents['n'])
+plt.ylabel('Frequency')
